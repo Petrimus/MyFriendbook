@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head lang="en">
+        <meta charset="UTF-8" />
+        <title>Registration page</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+        <link rel="stylesheet" th:href="@{/css/authentication.css}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/> 
+    </head>
+    <body>       
+        <div class="login-form">
+            <p th:if="${inuse}" class="error text-center">username or profile name allready in use!</p>
+            <form th:action="@{/register}" th:object="${account}" method="post">
+                <h2 class="text-center">Registration</h2>       
+                <div class="form-group">
+                    <input type="text" th:field="*{name}" class="form-control" placeholder="Name" name="name" required="required"/>                    
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error message</p>
+                </div>                
+                <div class="form-group">
+                    <input type="text" th:field="*{username}" class="form-control" placeholder="Username" name="username" required="required" />
+                    <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> error message</p>
+                </div>
+                <div class="form-group">
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Password" name="password" required="required" />
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">error message</p>
+                </div>
+                <div class="form-group">
+                    <input type="text" th:field="*{profilename}" class="form-control" placeholder="profile name" name="profileName" required="required" />
+                    <p th:if="${#fields.hasErrors('profilename')}" th:errors="*{profilename}">error message</p>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">sign in</button>
+                </div>
+            </form>            
+            <p class="text-center"><a th:href="@{/login}">Login page</a></p>
+        </div>
+    </body>
+</html>
+
+

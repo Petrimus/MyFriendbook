@@ -1,0 +1,11 @@
+.searchuser-list {
+    display: inline-block;
+}
+
+.searchuser-list-img {
+    
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+

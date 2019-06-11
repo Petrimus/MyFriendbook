@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hello world</title>
+    </head>
+    <body>
+        <header>
+            <div>
+                <h3>Wellcome <span sec:authentication="name">name</span></h3>
+            <form th:action="@{/logout}" method="post"> 
+                <input type="submit" value="Logout"/> 
+            </form>
+        </div>
+        </header>
+
+        <h1 th:text="${'Hello ' + message}">Hello world</h1>
+
+    </body>
+</html>
