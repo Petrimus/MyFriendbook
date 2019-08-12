@@ -27,4 +27,7 @@ public class Thumpup extends AbstractPersistable<Long> {
     
     @ManyToOne
     private Message message;
+    
+    @ManyToOne
+    private Account whoThumpups;
 }

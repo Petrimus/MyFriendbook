@@ -38,6 +38,11 @@ public class MessageController {
     @Autowired
     private CommentRepository commentRepository;
 
+    @ModelAttribute
+    private MessageForm getMessageForm() {
+        return new MessageForm();
+    }
+
     @PostMapping("/MyFriendbook/{profilename}/message")
     public String create(
             @Valid @ModelAttribute MessageForm messageForm,

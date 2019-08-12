@@ -11,8 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author petri
  */
-public interface MessageRepository extends JpaRepository<Message, Long> {
-    
+public interface MessageRepository extends JpaRepository<Message, Long> {    
     
     List<Message> findAllByToWho(Account toWho, Pageable pageable);
     

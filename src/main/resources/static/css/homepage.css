@@ -1,20 +1,23 @@
 
-.container {
-    margin-top: 30px; 
+.container {    
     margin-bottom: 30px;
     padding-bottom: 50px;
-
 }
+
 
 .profile-section {
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
+    display: flex;
+    padding-left: 25%;
+    justify-content: flex-start;
+    align-content: center;
+    margin-bottom: 20px;   
+    padding-bottom: 20px;
+    padding-top: 20px;
+    background-color: #F8F8F8;
 }
 
-.profile-img {
-    max-height: 400px;
+.profile-img {    
+    max-height: 500px;
     width: auto;
     object-fit: cover;
     margin: 10px;
@@ -24,24 +27,42 @@
     padding: 5px;
 }
 
-.wall-container {
+.profile-text {
+    align-self: center;
+}
+
+.wall {
     text-align: center;
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 10px;
+    background-color: #FFEAFE;
 }
 
-.side-bar {    
-    margin-top: 100px;
+.side-bar { 
+    margin-top: 0px;
+    margin-right: auto;
 }
 
-.message-container {
+.side-bar ul {
+    padding: 0px;   
+}
+
+.side-bar li {
+    list-style: none;
+}
+
+.message-container {    
     border: 2px solid #dedede;
     background-color: #f1f1f1;
     border-radius: 5px;
     padding: 10px;
     margin: 10px 0;
     text-align: center;
+}
+
+.button-show {
+    width: 60%;
 }
 
 .time-left {
@@ -54,13 +75,15 @@
     color: #aaa;
 }
 
-.author-center {    
+.author-center {
+    position: relative;
+    right: 40px;
     color: #aaa;
 }
 
 .message-container:nth-child(even) {
     border-color: #ccc;
-    background-color: #ddd;
+    background-color: #CFD2D7;
 }
 
 .message-container::after {
@@ -70,8 +93,16 @@
 }
 
 .new-message-container {
+    display: none;    
+    margin-top: 10px;
+    background-color: #FFE391;
+    border-radius: 10px;
+}
+
+.new-message {
     margin: auto;
-    width: 70%;
+    padding: 20px;    
+    width: 70%;    
 }
 .comments-section {
     margin-top: 20px;
@@ -87,12 +118,22 @@
     margin-top: 15px;
 }
 
-.new-comment-container {
-    width: 50%;
-    margin: auto; 
-    margin-top: 15px;
+.commentlink {   
+    padding: 5px 10px;
+    color: black;
+    background-color: #FFEAFE;
+    border: 1px solid #dedede;
+    border-radius: 5px;
 }
 
-.comment-display {
-   display: none;   
+.new-comment-container {
+    width: 60%;
+    margin: auto; 
+    margin-top: 15px;
+    text-align: center;
 }
+.comment-form {
+    display: inline-block;
+    width: 100%;
+}
+

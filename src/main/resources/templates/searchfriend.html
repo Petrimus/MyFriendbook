@@ -7,7 +7,7 @@
     </head>
     <body>
         <div th:replace="fragments/header :: header"></div>
-        <div class="container">
+        <div>
             <div class="profile-section" >
                 <h1 th:text="${profilename}">profilename</h1>
                 <div class="profile-picture" th:if="${profilepicture != null}">
@@ -15,58 +15,62 @@
                          alt="profile image"/>
                 </div>
             </div>
-            <div class="search-friends">
-                <h1>Relationship manager</h1>
-                <h2>Search MyFriendbook users</h2>
-                <form class="search-form" th:action="@{/MyFriendbook/{profilename}/relationships/find(profilename=${profilename})}" method="GET">
-                    <label>Search with name or profile name: </label>
-                    <input type="text" th:name="name" id="filter" />
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-            </div>
-            <div th:if="${searchresults != null}">
-                <div th:if="${#lists.isEmpty(searchresults)}">
-                    <p class="text-danger" th:text="${'No names matching found.'}" style="margin-top: 20px"></p>
-                </div>
-                <div class="inline-block" th:each="account : ${searchresults}">
-                    <div th:if="${account.profilePicture != null}">
-                        <img class="searchuser-list-img" th:src="@{/pictures/{id}/content(id=${account.profilePicture})}" />
+            <div class="container">
+                 <div class="row">
+                    <div class="col-sm-2 side-bar">
+                        <h3>Friends</h3>
+                        <ul th:each="friend : ${friendlist}">
+                            <li>
+                                <a th:href="@{/MyFriendbook/{profilename}/friend/{id}(profilename=${profilename}, id=${friend.id})}">
+                                    <span th:text="${friend.name}"><strong>name</strong></span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="inline-block"
-                        <span>  User name: <span th:text="${account.name}">name</span></span>
-                        <span>  Profile name: <span th:text="${account.profilename}">profilename</span></span>
-                        <form method="POST" th:action="@{/MyFriendbook/{profilename}/relationship/{id} (id=${account.id}, profilename=${profilename})}">
-                            <button type="submit" class="btn btn-sm btn-secondary">Request friend</button>
+                    <div class="col-sm-10 search-friends">               
+                        <h2>Search MyFriendbook users</h2>
+                        <form class="search-form" th:action="@{/MyFriendbook/{profilename}/relationships/find(profilename=${profilename})}" method="GET">
+                            <label>Search with name or profile name: </label>
+                            <input type="text" th:name="name" id="filter" />
+                            <button type="submit" class="btn btn-primary">Search</button>
                         </form>
-                    </div>
 
-                </div>
-            </div>
-            <div class="friends-list" th:unless="${#lists.isEmpty(friendlist)}">
-                <h2>Friends</h2>
-                <ul th:each="friend : ${friendlist}">
-                    <li style="list-style: none;" >
-                        <a th:href="@{/MyFriendbook/{profilename}/friend/{id}(profilename=${profilename}, id=${friend.id})}">
-                        <span th:text="${friend.name}"><strong>name</strong></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="friends-list" th:unless="${#lists.isEmpty(pendinglist)}">
-                <h2>Pending requests</h2>
-                <ul th:each="pend : ${pendinglist}">
-                    <li style="list-style: none;">                        
-                        <span th:text="${pend.name}"><strong>name</strong></span>                       
-                        <div style="display: inline-block;">
-                            <form style="display:inline;" method="POST" th:action="@{/MyFriendbook/{profilename}/relationship/{id}/accept (id=${pend.id}, profilename=${profilename})}">
-                                <button  type="submit" class="btn btn-sm btn-success">accept</button>
-                            </form> 
-                            <form  style="display:inline;" method="POST" th:action="@{/MyFriendbook/{profilename}/relationship/{id}/decline (id=${pend.id}, profilename=${profilename})}">
-                                <button  type="submit" class="btn btn-sm btn-warning">decline</button>
-                            </form>  
+                        <div th:if="${searchresults != null}">
+                            <div th:if="${#lists.isEmpty(searchresults)}">
+                                <p class="text-danger" th:text="${'No names matching found.'}" style="margin-top: 20px"></p>
+                            </div>
+                            <div class="inline-block" th:each="account : ${searchresults}">
+                                <div th:if="${account.profilePicture != null}">
+                                    <img class="searchuser-list-img" th:src="@{/pictures/{id}/content(id=${account.profilePicture})}" />
+                                </div>
+                                <div class="inline-block"
+                                     <span>  User name: <span th:text="${account.name}">name</span></span>
+                                    <span>  Profile name: <span th:text="${account.profilename}">profilename</span></span>
+                                    <form method="POST" th:action="@{/MyFriendbook/{profilename}/relationship/{id} (id=${account.id}, profilename=${profilename})}">
+                                        <button type="submit" class="btn btn-sm btn-secondary">Request friend</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>                   
+                        <div class="friends-list" th:unless="${#lists.isEmpty(pendinglist)}">
+                            <h3>Pending requests</h3>
+                            <ul th:each="pend : ${pendinglist}">
+                                <li style="list-style: none;">                        
+                                    <span th:text="${pend.name}"><strong>name</strong></span>                       
+                                    <div style="display: inline-block;">
+                                        <form style="display:inline;" method="POST" th:action="@{/MyFriendbook/{profilename}/relationship/{id}/accept (id=${pend.id}, profilename=${profilename})}">
+                                            <button  type="submit" class="btn btn-sm btn-success">accept</button>
+                                        </form> 
+                                        <form  style="display:inline;" method="POST" th:action="@{/MyFriendbook/{profilename}/relationship/{id}/decline (id=${pend.id}, profilename=${profilename})}">
+                                            <button  type="submit" class="btn btn-sm btn-warning">decline</button>
+                                        </form>  
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div th:replace="fragments/header :: footer"></div>

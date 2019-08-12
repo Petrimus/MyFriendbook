@@ -1,39 +1,57 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 function init() {
-    var links = document.querySelectorAll("#commentlink");
-    console.log(links);
+    const links = document.querySelectorAll(".commentlink");
+    // console.log(links);
     for (var i = 0; i < links.length; i++) {
-        var link = links[i];
-        console.log(link);
+        let link = links[i];
+        // console.log(link);
         link.id = i;
-
         link.addEventListener('click', handleClick, false);
+    }
+    const comments = document.querySelectorAll(".comment-display");
+    // console.log(comments);
+    for (var i = 0; i < comments.length; i++) {
+        comments[i].style.display = "none";
     }
 }
 
-function handleClick(eventInformation) {
-    console.log(eventInformation);
-    const origin = eventInformation.target;
-    console.log(origin.id);
-    displayArticle(origin.id);
+const handleShowNewMessage = () => {
+    // event.preventDefault();
+    const div = document.querySelector(".new-message-container");
+    console.log(div);
+    div.style.display = "block";
+};
 
+function handleClick(eventInformation) {
+    // console.log(eventInformation.target);
     eventInformation.preventDefault();
+    const origin = eventInformation.target;
+
+    const show = eventInformation.target.innerHTML === 'show comments';
+    // console.log(origin.id);
+    eventInformation.target.innerHTML =
+            eventInformation.target.innerHTML === 'show comments' ? 'hide comments' : 'show comments';
+    displayArticle(origin.id, show);
 }
 
-function displayArticle(index) {
-    var articles = document.querySelectorAll("#display");
-    console.log(articles);
+function displayArticle(index, show) {
+    const comments = document.querySelectorAll(".comment-display");
+    // console.log("index ", index);
+    // console.log(comments);
 
-    for (var i = 0; i < articles.length; i++) {
-        console.log(index);
+    for (var i = 0; i < comments.length; i++) {
+
         if (index == i) {
-            articles[i].className = '';
+            if (show) {
+                comments[i].style.display = "";
+            } else {
+                comments[i].style.display = "none";
+            }
         }
+        /*
+         else {
+         comments[i].style.display = "none";
+         }
+         */
     }
 }

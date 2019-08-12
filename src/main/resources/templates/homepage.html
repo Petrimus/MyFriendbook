@@ -8,83 +8,112 @@
 
     <body onload="init()">
         <div th:replace="fragments/header :: header"></div>
-        <div class="container">
-            <div class="profile-section" >               
-                <div class="profile-picture" th:if="${profilePicture != null}">
-                    <img class="profile-img" th:src="@{/pictures/{id}/content(id=${profilePicture})} "
-                         alt="profile image"/>
-                </div>
-                <div class="profile-text">
-                    <h1 th:text="${profilename}">profilename</h1>
-                    <h3 th:text="${name}" >name</h3>
-                </div>
-            </div>
 
+        <div class="profile-section" >               
+            <div class="profile-picture" th:if="${profilePicture != null}">
+                <img class="profile-img" th:src="@{/pictures/{id}/content(id=${profilePicture})} "
+                     alt="profile image"/>
+            </div> 
+            <div class="profile-text">
+                <h1 th:text="${profilename}">profilename</h1>
+                <h3 th:text="${name}" >name</h3> 
+            </div>
+        </div>
+        <div class="container">
             <div class="row">
                 <div class="col-sm-2 side-bar">
-
                     <h3>Friends</h3>
+                    <ul th:each="friend : ${friendlist}">
+                        <li>
+                            <a th:href="@{/MyFriendbook/{currentuser}/friend/{id}(currentuser=${currentuser}, id=${friend.id})}">
+                                <span th:text="${friend.name}"><strong>name</strong></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div th:unless="${#lists.isEmpty(pendinglist)}">
+                    <h3>Requests</h3>
+                    <ul th:each="pend : ${pendinglist}">
+                        <li>
+                            <a th:href="@{/MyFriendbook/{currentuser}/relationships(currentuser=${currentuser})}">
+                                <span th:text="${pend.name}"><strong>name</strong></span>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
                 </div>
-                <div class="col-sm-10 wall-container">
-                    <h2>The Wall</h2>
-                    <div th:if="${wallMessages != null}">
-                        <h3>Recent messages</h3>
-                        <div class="message-container" th:each="message : ${wallMessages}">                             
-                            <span class="time-left" th:if="${#lists.isEmpty(message.comments)}" <span>No comments</span></span>                          
-                            <form class="likes-right" method="POST" th:action="@{/{profilename}/thumpup (profilename=${profilename})}">
-                                <button class="btn btn-secondary btn-sm" type="submit" th:disabled="${!message.likeable}">Thumpup</button>
-                            </form>
-                            <h4 th:text="${message.title}">title</h4> 
-                            <p th:text="${message.content}"></p>
-                            <span class="time-left" th:text="${#temporals.format(message.timeAdded, 'dd-MM-yyyy HH:mm')}"> time</span>
-                            <span class="author-center">By <span th:text="${message.author.profilename}">author</span></span>
-                            <span class="likes-right"> Likes: <span th:text="${message.thumpups}">11</span></span>
-                            <a th:if="${!#lists.isEmpty(message.comments)}" href="#" id="commentlink">Show comments</a>
-                            <div class="comment-display" id="display">
-                                <div class="comment" th:each="comment : ${message.comments}">
-                                    <p th:text="${comment.content}">content</p>
-                                    <span class="time-left" th:text="${#temporals.format(comment.timeAdded, 'dd-MM-yyyy HH:mm')}"> time</span>
-                                    <span class="author-center">By <span th:text="${comment.author.profilename}">author</span></span>
-                                </div>
-                            </div>
-                            <div class="new-comment-container">
-                                <form class="form-inline comment-form" th:action="@{/MyFriendbook/{profilename}/message/{id}/comment 
-                                      (id=${message.getId()}, profilename=${profilename})}"
-                                      th:object="${commentForm}" method="POST">
-                                    <div class="form-group ">                                        
-                                        <input class="form-control" th:field="*{content}" placeholder="new comment"/>
-                                        <p th:if="${#fields.hasErrors('content')}" 
-                                           th:error="*{comment}">message error</p>
+                <div class="col-sm-10">
+                    <div class="wall">
+                        <h2>The Wall</h2>
+                        <h3 th:if="${ownPage}">messages / 
+                            <a th:href="@{/MyFriendbook/{currentuser}/pictures (currentuser=${currentuser})}">pictures</a>
+                        </h3>
+                        <h3 th:unless="${ownPage}">messages / 
+                            <a th:href="@{/MyFriendbook/{currentuser}/friend/{id}/pictures (currentuser=${currentuser}, id=${friendId})}">pictures</a>
+                        </h3>
+                        <button class="btn btn-outline-success button-show" th:text="'New message to ' + ${profilename}" onclick="handleShowNewMessage()">
+                            New message
+                        </button>
+                        <div class="new-message-container">
+                            <div class="new-message">
+                                <form th:action="@{/MyFriendbook/{profilename}/message (profilename=${profilename})}"
+                                      th:object="${messageForm}" method="POST">
+                                    <div class="form-group">
+                                        <label>Title</label>
+                                        <input class="form-control" th:field="*{title}"/>
+                                        <p th:if="${#fields.hasErrors('title')}" 
+                                           th:errors="*{title}">title error message </p>
                                     </div>
-                                    <button style="margin-left: 10px;" type="submit" class="btn btn-outline-success btn-sm">submit</button>
+                                    <div class="form-group">
+                                        <label>Message: </label>
+                                        <input class="form-control" th:field="*{content}"/>
+                                        <p th:if="${#fields.hasErrors('content')}" 
+                                           th:errors="*{content}">message error</p>
+                                    </div>
+                                    <button style="margin-left: 10px;" type="submit" class="btn btn-outline-success">submit</button>
                                 </form>
                             </div>
+                        </div>  
+                        <div th:if="${wallMessages != null}">                       
+                            <div class="message-container" th:each="message : ${wallMessages}">                                
+                                <span class="time-left" th:if="${#lists.isEmpty(message.comments)}" <span>No comments</span></span>                          
+                                <form class="likes-right" method="POST" 
+                                      th:action="@{/{currentuser}/{friendId}/thumpup/message/{id}(currentuser=${currentuser}, friendId=${friendId}, id=${message.id})}">
+                                    <button class="btn btn-secondary btn-sm" type="submit" th:disabled="${!message.likeable}">Thump up</button>
+                                </form>
+                                <h4 th:text="${message.title}">title</h4> 
+                                <p th:text="${message.content}"></p>
+                                <div class="comment-details">
+                                    <span class="time-left" th:text="${#temporals.format(message.timeAdded, 'dd-MM-yyyy HH:mm')}"> time</span>
+                                    <span class="author-center">By <span th:text="${message.author.profilename}">author</span></span>
+                                    <span class="likes-right"> Likes: <span th:text="${message.thumpups}">11</span></span>
+                                </div>
+                                <p style="margin-top: 10px">
+                                    <a th:if="${!#lists.isEmpty(message.comments)}" href="#" class="commentlink">show comments</a>
+                                </p>
+                                <div th:if="${!#lists.isEmpty(message.comments)}" class="comment-display">
+                                    <div class="comment" th:each="comment : ${message.comments}">
+                                        <p th:text="${comment.content}">content</p>
+                                        <span class="time-left" th:text="${#temporals.format(comment.timeAdded, 'dd-MM-yyyy HH:mm')}"> time</span>
+                                        <span class="author-center">By <span th:text="${comment.author.profilename}">author</span></span>
+                                    </div>
+                                </div>
+                                <div class="new-comment-container">
+                                    <form class="form-inline comment-form" th:action="@{/MyFriendbook/{profilename}/message/{id}/comment 
+                                          (id=${message.getId()}, profilename=${profilename})}"
+                                          th:object="${commentForm}" method="POST">                                                                                
+                                        <input class="form-control" th:field="*{content}" placeholder="new comment"/>
+                                        <p th:if="${#fields.hasErrors('content')}" 
+                                           th:errors="*{content}">message error</p>                                       
+                                        <button style="margin-left: 10px;" type="submit" class="btn btn-outline-success btn-sm">submit</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="new-message-container">
-                        <h4 th:text="'New message to ' + ${profilename}">New message</h4>
-                        <form th:action="@{/MyFriendbook/{profilename}/message (profilename=${profilename})}"
-                              th:object="${messageForm}" method="POST">
-                            <div class="form-group">
-                                <label>Title</label>
-                                <input class="form-control" th:field="*{title}"/>
-                                <p th:if="${#fields.hasErrors('title')}" 
-                                   th:errors="*{title}">title errormessage </p>
-                            </div>
-                            <div class="form-group">
-                                <label>Message: </label>
-                                <input class="form-control" th:field="*{content}"/>
-                                <p th:if="${#fields.hasErrors('content')}" 
-                                   th:error="*{message}">message error</p>
-                            </div>
-                            <button style="margin-left: 10px;" type="submit" class="btn btn-outline-success">submit</button>
-                        </form>
                     </div>                   
                 </div>
             </div>
         </div>
-
         <div th:replace="fragments/header :: footer"></div>
         <script th:src="@{/js/script.js}" defer></script>       
     </body>
-</html>
+</html>          

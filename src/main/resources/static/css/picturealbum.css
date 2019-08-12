@@ -1,17 +1,40 @@
 
-img {
-    width: 80%;
-    height: auto;
-    max-height: 500px;
-    object-fit: cover;
-    
-}
-
 .picture-container {
+    
+    background-color: whitesmoke;
+    border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-bottom: 25px;
     padding-top: 25px;
 }
+
+.image-container {
+    margin: 0 auto;
+    text-align: center;
+    width: 80%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 25px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;    
+}
+
+.picture-description {
+    text-align: center;
+    padding: 10px 20px;
+}
+
+.picture-show {
+    width: 60%;
+    margin-bottom: 10px;
+}
+
+
 
 .picture-button {
     display: inline-block;    
@@ -19,6 +42,18 @@ img {
 
 .picture-text {    
     width: 80%;
-    margin: auto;
-    
+    margin: 0 auto;    
+}
+
+.show-button-wrapper {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.show-button {
+    margin: 0 auto;
+}
+
+.picturenewcomment {
+    margin-bottom: 10px;
 }
