@@ -18,10 +18,9 @@ public class DefaultController {
     
     @Autowired AccountRepository accountRepository;
 
-    @GetMapping("/")
-    @ResponseBody
+    @GetMapping("/")    
     public String helloWorld() {
-        return "Hello World!";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
